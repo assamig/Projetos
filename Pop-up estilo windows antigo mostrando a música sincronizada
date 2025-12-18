@@ -1,0 +1,87 @@
+import tkinter as tk
+from tkinter import messagebox
+import random
+
+
+LETRA = ["Sua letra"
+        ]
+
+#contador no index pra ir interando e o delay pra ser o tempo de sincronia que o pop up vai aparecer na tela
+pop_up_index = 0
+delay = 4200
+
+#pegando o tipo de pop up e dando a variavel pra cada configuração 
+root = tk.Tk()
+root.title("Pop up")
+root.geometry("400x300")
+root.resizable(False, False)
+
+#aqui vai mostrar o proximo pop up
+def proximo_pop():
+    """mostra proximo pop up"""
+    global pop_up_index
+
+    if pop_up_index >= len(LETRA):
+        pop_up_index = 0
+        messagebox.showinfo("Mensagem no final")
+        return
+    
+    frase_atual = LETRA[pop_up_index]
+    popup = tk.Toplevel(root)
+    popup.overrideredirect(True)
+
+#onde pop up vai aparecer na tela
+    x = 200
+    y = 200
+
+#tamaho e configuração do pop up
+    popup.geometry(f"300x120+{x}+{y}")
+
+    frame = tk.Frame(popup, bg='#323232', relief="raised", borderwidth=3)
+    frame.pack(fill="both", expand=True)
+
+    frame_titulo = tk.Frame(frame, bg='#202020', height=20)
+    frame_titulo.pack(fill="x")
+
+    tk.Label(frame_titulo, text="For you", fg="white", bg="#202020", font=('Arial', 9, 'bold')).pack(side="left", padx=5)
+    tk.Label(frame_titulo, text="x", fg="white", bg="#D44949", font=('Arial', 9, 'bold')).pack(side="right", padx=5)
+
+    frame_conteudo = tk.Frame(frame, bg="#EAEAEA")
+    frame_conteudo.pack(fill="both", expand=True, pady=5, padx=5)
+
+#conteudo que vai ficar aparecendo no botao que no caso é o Error
+    label_texto = tk.Label(frame_conteudo, 
+                           text=f"ERROR: {frase_atual}", 
+                           font=('Arial', 10), 
+                           bg="#EAEAEA", 
+                           wraplength=250)
+    label_texto.pack(pady=10, padx=10, fill="x")
+
+    tk.Label(frame_conteudo, text="OK", font=('Arial', 10), relief="ridge", borderwidth=2).pack(pady=5)
+
+#aqui vau tá chamando a função com o delay
+    popup.after(delay, popup.destroy)
+    root.after(delay, proximo_pop)
+    pop_up_index += 1
+
+#configurações do botão 
+
+btn_iniciar = tk.Button(root,
+                        text="Error",
+                        command=proximo_pop,
+                        font=('Arial', 14, 'bold'),
+                        padx=10,
+                        pady=10,
+                        relief="raised",
+                        borderwidth=3,
+                        cursor="hand2")
+btn_iniciar.pack(pady=50)
+
+
+label_instrucao = tk.Label(root, 
+                           text="For you", 
+                           font=('Arial', 10))
+label_instrucao.pack(pady=20)
+
+
+root.mainloop()
