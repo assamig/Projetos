@@ -34,7 +34,7 @@ def proximo_pop():
     x = 200
     y = 200
 
-#tamaho e configuração do pop up
+#tamanho e configuração do pop up
     popup.geometry(f"300x120+{x}+{y}")
 
     frame = tk.Frame(popup, bg='#323232', relief="raised", borderwidth=3)
@@ -59,7 +59,7 @@ def proximo_pop():
 
     tk.Label(frame_conteudo, text="OK", font=('Arial', 10), relief="ridge", borderwidth=2).pack(pady=5)
 
-#aqui vau tá chamando a função com o delay
+#aqui vai tá chamando a função com o delay
     popup.after(delay, popup.destroy)
     root.after(delay, proximo_pop)
     pop_up_index += 1
