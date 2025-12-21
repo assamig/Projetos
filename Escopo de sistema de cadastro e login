@@ -1,0 +1,77 @@
+senhas = []
+users = []
+
+#função de criar senha e usuario
+#adiciona usuario a lista de usuarios
+#se a senha cadastrada tiver menos de 8 caracteres, e não tiver caracter especial ele retorna a condição que a senha precisa ter
+#se a senha estiver dentro dos parametros, ele adiciona a senha a lista de senhas 
+
+def senha():
+    criar_user = input("Crie seu usuario: ")
+    users.append(criar_user)
+    
+    n = (input("Crie sua senha: "))
+    if len(n) < 8:
+        print("Numero minimo de caracteres precisa ser 8")
+
+    if "@" not in n and "#" not in n and "$" not in n and "%" not in n:
+        print("Senha precisa ter um caractere especial (@, #, $, %)")
+    else:
+        senhas.append(n)
+        print("Seu cadastro foi realizado com sucesso!")
+    
+
+#função do login
+#verifica se a senha esta na lista de senhas e se usuario esta na lista de usuarios
+#se sim, ele da boas vindas
+#se não ele informa que senha ou usuario está incorreto, e pede para se registrar, ou oferece para mudar a senha com o "Esqueci minha senha"
+def login():
+    usuario = input("Digite seu usuario: ")
+    senha_login = input("Digite sua senha: ")
+    
+
+    if senha_login in senhas and usuario in users:
+        print(f"Bem vindo, {usuario}!")
+    else:
+        print("Senha ou usuário incorreto ou registre-se!")
+        esqueci = input("Esqueci minha senha ou Sair:")
+        if esqueci.lower() == "esqueci minha senha":
+            nova = input("Digite sua nova senha: ")
+            senhas.append(nova)
+            print("Senha alterada com sucesso!")
+        elif esqueci.lower() == "sair":
+            print("Saindo...")
+            return
+
+
+#função principal do main que vai chamar o restante das funções
+# se for 1, o usuario faz login
+# se for 2, o usuario se registra 
+# se for 3, o usuario consulta a lista de senhas cadastradas
+# se for 4, o usuario encerra o programa 
+# se n for nenhuma das opções, ele pede para digit=tar uma opção válida   
+    
+def main():
+    while True:
+        print("1. Login")
+        print("2. Registrar")
+        print("3.Consultar senhas")
+        print("4.Sair")
+        entrada = input("Escolha uma opção: ")
+        
+        if entrada == "1":
+            login()
+        elif entrada == "2":
+            senha()
+        elif entrada == "3":
+            print(senhas)
+        elif entrada == "4":
+            print("Saindo...")
+            break
+        else:
+            print("Digite uma opção válida")
+
+
+# se o arquivo for rodado direto ele chama a função main
+if __name__ == "__main__":
+    main()
