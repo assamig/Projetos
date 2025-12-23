@@ -1,0 +1,74 @@
+tarefas = []
+
+
+#adiciona tarefas com o append
+#ele coloca o sinal do x para indicar que a tarefa ainda vai ser concluida
+def adicionar():
+    entrada = input("Adicione sua tarefa: ")
+    tarefas.append(entrada + "❌​")
+    print("Sua tarefa foi adicionada com sucesso!")
+
+
+#remove a tarefa da lista pelo indice digitado, usando o pop
+def remover():
+    remove = int(input("Digite o índice da tarefa que deseja remover: "))
+    tarefas.pop(remove)
+    print("Sua tarefa foi removida com sucesso!")
+
+
+#carrega as tarefas concluidas e não concluidas linha por linha usando a função "for"
+def carregar():
+    for t in tarefas:
+        print("Tarefa: ", t)
+
+
+
+#ele verifica o indice na lista colocando o parametro do numero exato dele, indo de 0
+#ate a quantidade de itens na lista, com o len
+#se o sinal do x estiver no indice da lista das tarefas, ele vai substituir pelo sinal de certo 
+#usando o replace
+#se o indice digitado não estiver na lista, ele diz que o indice está inválido
+def concluir():
+    indice = int(input("Digite o índice da tarefa que deseja concluir: "))
+
+    if 0 <= indice < len(tarefas):
+        if "❌​" in tarefas[indice]:
+            tarefas[indice] = tarefas[indice].replace("❌​","✔️")
+
+
+        print("Tarefa concluida com suceso!")
+    else: 
+        print("Indice inválido!")
+        
+
+
+#menu que mostra as opções disponiveis, e se o usuario escolher x opção, ele chama a função daquela opção
+#se a opção não estiver nas opções disponiveis ou digitar qualquer outra coisa
+#ele retorna pedindo pra escolher uma opção válida
+def menu():
+    while True:
+        print("Bem vindo ao Gerenciador de Tarefas!")
+        print("1. Adicionar tarefas")
+        print("2. Remover tarefas")
+        print("3. Carregar tarefas")
+        print("4. Concluir tarefas")
+        print("5. Sair")
+        escolha = input("Digite sua opção: ")
+        if escolha == "1":
+            adicionar()
+        elif escolha == "2":
+            remover()
+        elif escolha == "3":
+            carregar()
+        elif escolha == "4":
+            concluir()
+        elif escolha == "5":
+            break
+        else:
+            print("Digite uma opção válida!")
+            break
+
+
+#se o arquivo estiver rodando diretamente, ele chama a função do menu
+if __name__ == "__main__":
+    menu()
