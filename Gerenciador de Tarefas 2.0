@@ -2,7 +2,7 @@
 tarefas = []
 
 
-#with open cria acessa o arquivo, e garannte que ele se feche, com o w ele escreve no arquivo, e se o arquivo não existe, apaga e reescreve por cima
+#with open cria e acessa o arquivo, e garante que ele se feche, com o w ele escreve no arquivo, e se o arquivo não existe, apaga e reescreve por cima
 #enconding utf 8 permite caracteres tipo os emotes que vai ser utilizados
 #"as arquivo" é a variavel do acesso e criação do arquivo
 #no laço de repetição, ele percorre a lista e escreve cada tarefa um por um no arquivo
