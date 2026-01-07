@@ -1,0 +1,204 @@
+#lista de notas que será usada
+notas = []
+
+#salva o arquivo, abrindo ele e escrevendo em notas.txt, se n existir, ele cria notas.txt com a função w
+#pra cada aluno em notas, vai percorrer a lista, vai converter cada numero em texto e depois junta tudo com espaço usando join
+def salvar_arquivo():
+    with open("notas.txt", "w", encoding="utf-8") as arquivo:
+        for aluno in notas:
+            notas_str = " ".join(str(n) for n in aluno["nota"])
+
+            #aqui ele vai escrever no arquivo cada parte, o nome, as notas, a média, a situação para serem atribuídos
+            #e no arquivo vão ficar separados por ponto e vírgula(;)
+            arquivo.write(
+                f"{aluno['nome']};"
+                f"{notas_str};"
+                f"{aluno['media']};"
+                f"{aluno['situacao']};"
+            )
+
+
+
+#ele abre o arquivo e lê ele
+#pra cada linha no arquivo se nâo tiver espaços em branco, ele continue
+#ele define as partes que serão separadas com ;
+def carregar_arquivo():
+    try:
+        with open("notas.txt", "r", encoding="utf-8") as arquivo:
+            for linha in arquivo:
+                if not linha.strip():
+                    continue
+
+                partes = linha.strip().split(";")
+
+
+                #se a quantidade das partes for diferente de 4,que é aluno, nota, media e situação
+                #ele ignora a linha e retorna a exata linha ignorada
+                if len(partes) != 4:
+                    print(f"Linha inválida ignorada: {linha.strip()}")
+                    continue
+                    
+                #aqui ele vai atribuir cada variavel, cada parte, pra separar de vez com ;
+                #listas_notas, ele vai transformar as notas em numero decimal(float)
+                nome, notas_str, media, situacao = linha.strip().split(";")
+                listasnotas = [float(n) for n in notas_str.split()]
+
+                #define como será salvo no arquivo
+                aluno = {
+                        "nome": nome,
+                        "nota": listasnotas,
+                        "media": float(media),
+                        "situacao": situacao
+                        }
+                
+                #adiciona na lista
+                notas.append(aluno)
+
+            #se o arquivo não for encontrado ele ignora
+    except FileNotFoundError:
+        pass
+            
+
+
+#retorna o calculo da media na lista de notas, somando todas as notas e dividindo pela quantidade das notas
+def calcular_media(listanota):
+   return sum(listanota) / len(listanota)
+
+#define a situação na media, sendo maior que 7, aprovado, menor que 7, reprovado
+def situacao(media):
+    if media >= 7:
+        return "APROVADO"
+    else:
+        return "REPROVADO"
+
+
+#aqui ele dá as duas entradas, com o nome do aluno e a nota
+#define a listas de notas, transformando as notas string em numero decimal
+#define a media chamando a função pra calcular a média
+#verifica a situção do aluno na média, chamando a função pra verificar
+def adicionar():
+    
+    try:
+        nome = input("Digite o nome do aluno: ")
+        nota = input("Digite as notas: ").split()
+        listas_notas = [float(n) for n in nota]
+    
+
+        media = calcular_media(listas_notas)
+        verificar = situacao(media)
+
+        #aqui mostra como será salvao na lista
+        aluno = {
+                "nome": nome,
+                "nota": listas_notas,
+                "media": media,
+                "situacao": verificar
+                }
+
+        #adiciona na lista e salva no arquivo
+        notas.append(aluno)
+        salvar_arquivo()
+        print("Aluno cadastrado com sucesso!")
+
+        #Se digitar um valor errado ele retorna pedindo pra digitar um número válido
+    except ValueError:
+        print("Digite um número válido!")
+
+
+
+#essa função será importante para a função de remover alunos, pois poderá consultar o indice para remoção via pop
+#ele define o indice do aluno, e usa o enumerate para retornar o indice na lista
+def indice():
+    for i, aluno in enumerate(notas):
+        print(
+            "Índice: "
+            f"{i} - {aluno['nome']} | "
+            f"{aluno['nota']} | "
+            f"{aluno['media']:.2f} | "
+            f"{aluno['situacao']}"
+        )
+
+
+
+#se a quantidade de caracteres na lsita estiver zerada ele retorna que a lista tá vazia
+#ele chama a função de listar indice
+
+def remover():
+    if len(notas) == 0:
+        print("Sem alunos para remover")
+        return 
+    
+    indice()
+
+    try:
+        #aqui vai digitar o indice do aluno que quer remover e remove o aluno da lista com o pop pelo indice
+        #ele salva o arquivo quando remove
+        remove = int(input("Digite o índice do aluno que deseja remover: "))
+        notas.pop(remove)
+        salvar_arquivo
+        print("Aluno removido com sucesso!")
+        
+        #se o indice não estiver na lista, ele retorna pra digitar um indice válido 
+    except IndexError:
+        print("Digite um índice válido!")
+        #se ele digitar um valor errado, ele retorna pra digitar um numero válido
+    except ValueError:
+        print("Digite um número válido!")
+
+
+#se a lista estiver vazia, ele retorna comunicando que a lista está zerada
+def carregar():
+    if len(notas) == 0:
+        print("Sua lista está vazia!")
+
+        #ele carrega a lista
+    else:
+        for aluno in notas:
+
+         print(
+             f"{aluno['nome']} | "
+             f"{aluno['nota']} | "
+             f"{aluno['media']} | "
+             f"{aluno['situacao']}"
+            )
+
+
+#while true pra continuar rodando depois de finalizar uma opção
+#\n pra quebra de texto
+def menu():
+    while True:
+        print("\nBem vindo ao Registrador de Notas!")
+        print("1. Adicionar aluno")
+        print("2. Carregar alunos")
+        print("3. Remover alunos")
+        print("4. Sair")
+
+        escolha = input("Digite sua opção: ")
+
+        #se digitar 1 ele chama a função de adicionar
+        if escolha == "1":
+            adicionar()
+        #se digitar 2 ele chama a função de carregar
+        elif escolha == "2":
+            carregar()
+        #se diigtar 3 ele chama a função de remover
+        elif escolha == "3":
+            remover()
+        #se digitar 4, ele encerra o programa
+        elif escolha == "4":
+            print("Saindo...")
+            break
+        else:
+            print("Digite uma opção válida!")
+            continue
+
+
+
+
+
+
+#enquanto o arquivo estiver rodando diretamente, ele chama o carregar arquivo, pra poder carregar no ARQUIVO fixo e não na lista
+#e chama o menu para iniciar o programa
+if __name__ == "__main__":
+    carregar_arquivo()
+    menu()
