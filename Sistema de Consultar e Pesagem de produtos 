@@ -1,0 +1,89 @@
+#listas que serão usadas no programa
+#lista das frutas, peso que ficará inteiros para serem calculados e lista de códigos
+lista = ['Maçã', 'Abacaxi', 'Uva', 'Morango', 'Melão','Pão']
+peso = [14.99, 10.99, 9.89, 12.89, 7.99, 10.99]
+codigo = ['231', '911','321', '829','219', '144']
+
+#aqui vai ser a função para exibir a lista dos códigos dos produtos e os produtos respectivamente 
+#o laço percorre cada elemento nas listas e exibe cada um deles, onde o zip vai servir para o laço percorrer em mais de duas listas
+def listagem():
+    for codigos, frutas in zip(lista, codigo):
+        print(f"Produto: {frutas} - Código: {codigos}")
+
+#aqui é a função de calcular o preço do produto na hora de pesar
+def pesar():
+    #duas entradas uma para colocar o produto que será pesado pelo código e outra para colocar a quantidade que será pesado 
+    #entrada em float para conter casas decimais, levando em conta de peaagem por gramas
+    #try para tratar erros
+    try:
+        produto = input("Digite o código: ")
+        entrada = float(input("Digite a quantidade: "))
+
+    #o laço percorre cada elemento nas listas para obdecer as condições abaixo
+        encontrado = False #inicia com a condição de encontrado como false, para ele validar a condição no laço
+        for codigos, frutas, pesos in zip(codigo, lista, peso):
+        #se na entrada tiver o código do produto, ele vai retornar o valor total, onde o calculo vai ser multplicar o preço da
+        #quantidade digitada pelo exato preço do kg, do exato item pelo código
+        #ele válida encontrado como True, pq encontrou o elemento nas listas,
+        #e se ele não tiver encontrado, caso digite um código errado ou que não exista ele
+        #retorna pra digitar um código válido, isso vale pra qualquer valor que não esteja na lista
+            if produto == codigos:
+                print(F"{frutas} - Total: R${entrada * pesos:.2f}")
+                encontrado = True
+        if not encontrado:
+            print("Digite um código válido!")
+    #se digitar qualquer outra coisa que não seja número ele retorna pra digitar um número válido
+    except ValueError:
+        print("Digite um número válido!")
+        
+#aqui será para consultar o produto pelo código
+def consultar():
+    #declara encontrado como False, pra seguir a mesma lógica da função anterior
+    #entrada dos produtos para digitar o código
+    
+    encontrado = False
+    entrada = input('Consulte o produto pelo código: ')
+    #o laço percorre cada elemento nas duas listas
+    for codigos, frutas in zip(codigo, lista):
+            #se a entrada tiver o código, ele retorna o item do código, e válida encontrado como True pq encontrou o item
+            #na lista, e se não tiver encontrado ele retorna para digitar um código válido, isso vale pra qualquer valor que não esteja na lista
+            if entrada == codigos:
+                print(f"Produto: {frutas}")
+                encontrado = True
+            
+    if not encontrado:
+        print("Digite uma código válido!")
+
+#aqui será o menu iniciado
+def menu():
+    while True:
+        print("\nBem vindo ao Consultar Produtos")
+        print("1. Listagem")
+        print("2. Pesar produto")
+        print("3. Consultar produto")
+        print("Digite F para Sair")
+        entrada = input('Escolha sua opção: ')
+        #se a entrada for F maiúsculo ou minúsculo ele encerra o programa, o upper vai ser pra transformar em maiúsculo, então válida tanto minúsculo ou maiúsculo
+        if entrada.upper() == "F":
+             print("Saindo...")
+             break
+        #se a entrada for 1, ele chama a função de listar produtos e seus códigos
+        elif entrada == "1":
+            listagem()
+        #se a entrada for 2, ele chama a função de pesar produto
+        elif entrada == "2":
+            pesar()
+        #se a entrada for 3, ele chama a função de consultar produto
+        elif entrada == "3":
+            consultar()
+        #se digitar qualquer valor que não seja esses, ele retorna pra digitar uma opção válida
+        else:
+            print("Digite uma opção válida!")
+        
+    
+        
+                     
+                
+
+#chama a função menu para iniciar o programa
+menu()
