@@ -7,7 +7,7 @@ codigo = ['231', '911','321', '829','219', '144']
 #aqui vai ser a função para exibir a lista dos códigos dos produtos e os produtos respectivamente 
 #o laço percorre cada elemento nas listas e exibe cada um deles, onde o zip vai servir para o laço percorrer em mais de duas listas
 def listagem():
-    for codigos, frutas in zip(lista, codigo):
+    for frutas, codigos in zip(lista, codigo):
         print(f"Produto: {frutas} - Código: {codigos}")
 
 #aqui é a função de calcular o preço do produto na hora de pesar
