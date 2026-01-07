@@ -1,0 +1,208 @@
+#lista de agenda que será usada no programa 
+agendas = []
+
+#salva o arquivo, se não cria um novo arquivo com o w e denomina como "arquivo"
+def salvar_arquivo():
+    with open("agenda.txt", "w", encoding="utf-8") as arquivo:
+        #é aqui onde liga a lista com o arquivo, atráves do laço 
+        #o laço percorre cada elemento na lista de agendas e escreve a estrutura de como será salvo no arquivo, separados
+        #por ponto e virgúla, no final coloca uma quebra de texto
+        for tarefa in agendas:
+            
+            arquivo.write(
+                f"{tarefa['tarefa']};"
+                f"{tarefa['horario']};"
+                f"{tarefa['status']}\n"
+            )
+
+#função onde vai carregar o arquivo
+def carregar_arquivo():
+    try:
+        #começa com o try para tratar erros
+        #ele abre o arquivo e lê com o r
+        with open("agenda.txt", "r", encoding="utf-8") as arquivo:
+            #ele percorre cada linha no arquivo e se não tiver espaço em branco ele continua
+            for linha in arquivo:
+                if not linha.strip():
+                    continue
+
+                #define cada elemento separado, tirando espaços em brancos e caractéres indesejados com o strip
+                #o split(;) divide as strings em partes e transforma em lista usando ponto e virgúla como separador
+                tarefa, hora, status = linha.strip().split(";")
+
+                agenda = {
+                        "tarefa": tarefa,
+                        "horario": hora,
+                        "status": status
+                        }
+                #aqui vai carregar como será na lista e carrega as tarefas que estão no arquivo na lista
+                agendas.append(agenda)
+    #se o arquivo não for encontrado ele passa
+    except FileNotFoundError:
+        pass
+
+#função de adicionar tarefas
+def adicionar():
+    #inicia com try pra tratar erros
+    try:
+        #entrada para colocar a tarefa que será adicionada e usa strip pra tirar espaços em branco
+        tarefa = input("Adicione a tarefa para o agendamento: ").strip()
+        #entrada para colocar o horário da tarefa e usa strip para tirar espaços em branco
+        horario = (input("Digite um horário: ").strip())
+
+        #aqui as partes usando o split vão quebrar o a string : como separador e transformar em lista pra trabalhar o horário de forma lógica, por exemplo trabalhar o índices do horário e minuto
+        partes = horario.split(":")
+
+
+        #verifica se não existe duas partes no horário por exemplo se digitar só "9" ou se digitar "9:30:20" ou "9-20"
+        #ele retorna para usar formato hora e minuto
+        if len(partes) != 2:
+            print("Formato inválido! Use hora:minuto")
+            return
+
+        #determina hora e minuto pelos indices das partes
+        hora = int(partes[0])
+        minuto = int(partes[1])
+
+        #se a hora for menor que 0 ou maior que 23, e minuto menor que 0 e maior que 59, ele retorna como horário inválido
+        if hora < 0 or hora > 23 or minuto < 0 or minuto > 59:
+            print("Horário inválido!")
+            return
+        
+        #aqui mostra como será adicionado na lista, e o status já será adicionado com x vermelho para indicar que a tarefa não foi concluída
+        lista    = {
+                    "tarefa": tarefa,
+                    "horario": horario,
+                    "status": "❌"
+                   }
+        #ele adiciona com append e salva com salvar arquivo
+        agendas.append(lista)
+        salvar_arquivo()
+        #ele retorna que foi adicionado com sucesso 
+        print("Agendamento cadastrado com sucesso!")
+    #se digitar um valor errado ele retorna pra digitar um número válido
+    except ValueError:
+        print("Digite um número válido!")
+
+#função de índices pra remover tarefas
+def indice():
+    #o laço percorre a lista e usando o enumerate, ele vai identificar os índices das tarefas na lista de agendas e printar os índices
+    for i, tarefa in enumerate(agendas):
+        print("Índice: "
+            f"{i} - {tarefa['tarefa']} | "
+            f"{tarefa['horario']}"
+        )
+
+#função de remover tarefa
+def remover():
+       #se a quantidade de caracteres na lista for 0 ele retorna que não tem agendamentos pra remover
+       if len(agendas) == 0:
+        print("Sem agendamentos para remover")
+        return 
+
+        #aqui chama a função de mostrar índice das tarefas
+       indice()
+
+       #try para tratar erros
+       try:
+           #entrada com int para digitar o índice que será digitado, pop remove a tarefa pelo índice digitado, salva no arquivo e retorna que o agendamento foi removido com sucesso
+           remove = int(input("Digite o índice da tarefa que deseja remover: "))
+           agendas.pop(remove)
+           salvar_arquivo()
+           print("Agendamento removido com sucesso!")
+            
+        #se o indice não estiver na lista, ele retorna pra digitar um indice válido 
+       except IndexError:
+           print("Digite um índice válido!")
+        #se ele digitar um valor errado, ele retorna pra digitar um numero válido
+       except ValueError:
+           print("Digite um número válido!")
+
+
+#função para carregar tarefas
+def carregar():
+    #se a lista estiver vazia, ele retorna comunicando que a lista está zerada
+    if len(agendas) == 0:
+        print("Sua lista está vazia!")
+
+        #ele carrega a lista
+    else:
+        for tarefa in agendas:
+
+         print(
+             "Agendamentos: "
+             f"{tarefa['tarefa']} | "
+             f"{tarefa['horario']} | "
+             f"{tarefa['status']}"
+
+            )
+
+#função para concluir tarefas
+def concluir():
+    #se não tiver nada na lista diz que não tem tarefas cadastradas
+    if len(agendas) == 0:
+        print("Não há tarefas cadastradas.")
+        return
+
+    #chama a função pra mostrar o índice das tarefas
+    indice()
+
+    #try para tratar erros
+    try:
+        #entrada para digitar o índice da tarefa que quer concluir
+        indice_agenda = int(input("Digite o índice da tarefa que deseja concluir: "))
+
+        #ele indentifica o índice da tarera se o índice for maior o igual a 0 e menor que a quantidade de caracteres na lista
+        if 0 <= indice_agenda < len(agendas):
+            #no indice digitado, nos status ele coloca a setinha verde onde substitui o x vermelho, salva o arquivo e printa que foi concluída com sucesso
+            agendas[indice_agenda]["status"] = "✔️"
+            salvar_arquivo()
+            print("Tarefa concluída com sucesso!")
+            
+            #se o índice não estiver na lista ele retorna que o índice é inválido
+        else:
+            print("Índice inválido!")
+    #se digitar um valor errado, ele retorna pra digitar um número válido
+    except ValueError:
+        print("Digite um número válido!")
+
+#função de iniciar o menu
+def menu():
+    #loop while pra continuar repetindo
+    while True:
+        print("\nBem vindo ao Sistema de Agendamentos")
+        print("1. Adicionar agendamento")
+        print("2. Carregar agendamentos")
+        print("3. Remover agendamentos")
+        print("4. Concluir agendamentos")
+        print("5. Sair")
+
+        #entrada pra digitar a opção
+        escolha = input("Digite sua opção: ")
+
+        #se input for 1 ele chama a função adicionar
+        if escolha == "1":
+            adicionar()
+        #se input for 2 ele chama a função carrregar
+        elif escolha == "2":
+            carregar()
+        #se input for 3 ele chama a função remover
+        elif escolha == "3":
+            remover()
+        #se input for 4 ele chamaa a função de concluir
+        elif escolha == "4":
+            concluir()
+        #se escolha for 5, ele encerra o programa 
+        elif escolha == "5":
+            print("Saindo...")
+            break
+        #se digitar qualquer outra coisa ele retorna pra digitar uma opção válida
+        else:
+            print("Digite uma opção válida!")
+            continue
+
+#enquanto o arquivo estiver rodando diretamente, ele chama o carregar arquivo, pra poder carregar no ARQUIVO fixo e não na lista
+#e chama o menu para iniciar o programa
+if __name__ == "__main__":
+    carregar_arquivo()
+    menu()
