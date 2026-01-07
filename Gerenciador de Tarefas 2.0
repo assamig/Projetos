@@ -1,3 +1,4 @@
+#lista de tarefas que será usado no programa
 tarefas = []
 
 
@@ -36,12 +37,20 @@ def adicionar():
     salvar_arquivo()
     print("Sua tarefa foi adicionada com sucesso!")
 
+#pra cada indice e tarefa na lista de tarefas ele usa o ennumerate para mostrar o numero do indice da tarefa 
+def indice():
+    for i, tarefa in enumerate(tarefas):
+        print("Índice: "
+              f"{i} - {tarefa}")
 
-#remove a tarefa da lista pelo indice digitado, usando o pop
+
+#ele chama a função indice para mostrar o número do índice da tarefa na lista e remove pelo índice digitado usando pop
 #o try expect retorna pra digitar um valor válido caso o indice não esteja na lista
 #ele chama o salvar o arquivo sempre que fizer alguma alteração
 def remover():
     try:
+        indice()
+
         remove = int(input("Digite o índice da tarefa que deseja remover: "))
         tarefas.pop(remove)
         salvar_arquivo()
